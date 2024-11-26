@@ -1,0 +1,76 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: white;
+}
+/* scrollbar */
+/* Apply to all scrollbars */
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #333 #222; /* Firefox */
+}
+
+/* For Webkit-based browsers */
+*::-webkit-scrollbar {
+  width: 8px; /* Customize width for vertical scrollbars */
+  height: 8px; /* Customize height for horizontal scrollbars */
+}
+
+*::-webkit-scrollbar-track {
+  background: #222; /* Track color */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #333; /* Thumb color */
+  border-radius: 10px; /* Rounded corners */
+  border: 2px solid #222; /* Padding around thumb */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #444; /* Thumb color on hover */
+}
+
+.scroll-snap-type-y-mandatory {
+  scroll-snap-type: y mandatory;
+}
+
+.scroll-snap-center {
+  scroll-snap-align: center;
+}
+
+section {
+  height: 100vh;
+  perspective: 500px;
+  background-size: cover;
+}
+
+.App .splash-screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.App .main-content {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  animation-delay: 2s; /* Sync with splash screen duration */
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.head {
+  padding-top: 30px;
+  font-weight: 600;
+  font-size: 2.25rem;
+  text-align: center;
+}
+
+.background_footer {
+  background-size: cover;
+}
