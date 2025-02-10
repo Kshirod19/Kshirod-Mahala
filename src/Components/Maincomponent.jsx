@@ -3,7 +3,8 @@ import Navbar from "../Components/Navbar";
 import Herosection from "../Components/Herosection";
 import About from "../Components/About";
 import Projects from "../Components/Projects";
-import Footer from "./Footer";
+import Footer from "../Components/Footer";
+
 const Maincomponent = () => {
   return (
     <div>
@@ -15,7 +16,6 @@ const Maincomponent = () => {
         <About />
       </section>
       <Projects />
-
       <Footer />
     </div>
   );

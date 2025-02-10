@@ -1,25 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors: {
-        color1: ' #333333ff',
-        Color2: '#d5ccc7ff',
-        Color3: '#a9a29cff',
-        Color4: '#28262bff',
+      animation: {
+        meteor: "meteor 5s linear infinite", // Keep only the meteor animation
       },
-      fontFamily:{
-        logoname:' "Quattrocento", serif;',
-       paragraph: '"Source Sans 3", sans-serif;',
-       Head: '"Poppins", sans-serif;'
-
+      
+      keyframes: {
+        meteor: {
+          "0%": { transform: "rotate(250deg) translateX(0)", opacity: 1 },
+          "100%": {
+            transform: "rotate(250deg) translateX(-600px)",
+            opacity: 0,
+          },
+        },
       },
-     
     },
   },
   plugins: [],
-}
+};

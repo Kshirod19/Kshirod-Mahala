@@ -1,143 +1,179 @@
-import { useState, useEffect } from "react";
-import {
-  motion,
-  useAnimation,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
-import image1 from "../Portfolio-photos/Photo1.png";
-import Herobg from "../assets/herobg.png";
+import React, { useEffect } from "react";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { Sparkles } from "./SparkleParticle/Sparkle";
+import "../App.css";
 
 const Herosection = () => {
-  const fullText = "Innovate. Create. Inspire. Repeat.";
-  const typingSpeed = 40;
-  const backspaceDelay = 5000;
-  const typingDelay = 3000;
-
-  const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const controls = useAnimation();
-  const scrollY = useMotionValue(0); // Track scroll position smoothly
-  const kshirodX = useTransform(scrollY, [0, 800], [0, 200]); // Move right
-  const mahalaX = useTransform(scrollY, [0, 800], [0, -200]); // Move left
-
-  // Image animations based on scroll
-  const imageScale = useTransform(scrollY, [0, 300], [1, 0.8]); // Scale down on scroll
-  const imageOpacity = useTransform(scrollY, [0, 300], [1, 0.5]); // Fade out on scroll
-
   useEffect(() => {
-    controls.start({ opacity: 1, y: 0 });
+    const nameLetters = document.querySelectorAll(".letter");
 
+// Gradual Spacing Animation with scaling and smooth transitions
+gsap.fromTo(
+  nameLetters,
+  { opacity: 0, letterSpacing: "0px", scale: 0.8, y: 10 },
+  {
+    opacity: 1,
+    letterSpacing: "10px",
+    scale: 1,
+    y: 0,
+    ease: "power3.out",
+    duration: 2,
+    stagger: {
+      from: "start",
+      amount: 1,
+    },
+    delay: 2, // Delayed start for smooth effect
+    onComplete: () => {
+      // Revert scale to normal smoothly
+      gsap.to(nameLetters, {
+        scale: 1,
+        ease: "power3.inOut",
+        duration: 1.5,
+        stagger: {
+          from: "end",
+          amount: 0.6,
+        },
+      });
+    },
+  }
+);
+
+// Smooth color morphing for text (Blue 500)
+gsap.to(nameLetters, {
+  color: "hsl(207, 100%, 50%)",
+  duration: 3,
+  repeat: -1,
+  yoyo: true,
+  stagger: 0.2, // Slightly slower stagger for better effect
+  ease: "sine.inOut",
+});
+
+// Smooth subtitle reveal with optimized timing
+gsap.fromTo(
+  ".subtitle",
+  { opacity: 0 },
+  {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    duration: 2,
+    delay: 4.7, // 2s delay after the name animation
+    ease: "power3.out",
+  }
+);
+
+
+    // 3D Scroll Animation
+    const scrollText = document.querySelectorAll(".scroll-text");
     const handleScroll = () => {
-      scrollY.set(window.scrollY);
+      const scrollPosition = window.scrollY;
+
+      scrollText.forEach((textElement) => {
+        const offset = textElement.offsetTop;
+        const elementHeight = textElement.offsetHeight;
+        const windowHeight = window.innerHeight;
+        const scrollProgress =
+          (scrollPosition + windowHeight - offset) /
+          (elementHeight + windowHeight);
+
+        const rotation = Math.min(Math.max(scrollProgress * 60 - 30, -30), 30);
+        let opacity = 1 - Math.abs(scrollProgress - 0.5) * 1.5;
+        opacity = Math.min(opacity, 1);
+        opacity = Math.max(opacity, 0.2);
+
+        gsap.to(textElement, {
+          rotationY: rotation,
+          opacity: opacity,
+          transformStyle: "preserve-3d",
+          ease: "power3.out",
+          duration: 0.1,
+        });
+      });
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [controls, scrollY]);
 
-  useEffect(() => {
-    let timeout;
-    if (!isDeleting && displayedText.length < fullText.length) {
-      timeout = setTimeout(() => {
-        setDisplayedText(fullText.substring(0, displayedText.length + 1));
-      }, typingSpeed);
-    } else if (!isDeleting && displayedText.length === fullText.length) {
-      timeout = setTimeout(() => {
-        setIsDeleting(true);
-      }, backspaceDelay);
-    } else if (isDeleting && displayedText.length > 0) {
-      timeout = setTimeout(() => {
-        setDisplayedText(fullText.substring(0, displayedText.length - 1));
-      }, typingSpeed);
-    } else if (isDeleting && displayedText.length === 0) {
-      setIsDeleting(false);
-      timeout = setTimeout(() => {
-        setDisplayedText(fullText.substring(0, displayedText.length + 1));
-      }, typingDelay);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [
-    displayedText,
-    isDeleting,
-    fullText,
-    typingSpeed,
-    backspaceDelay,
-    typingDelay,
-  ]);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div
       id="home"
-      className="relative flex lg:items-center md:items-center items-start justify-center min-h-screen bg-cover bg-center overflow-hidden pt-60 md:pt-0 lg:pt-0"
-      style={{ backgroundImage: `url(${Herobg})` }}
+      className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#000000] to-[#202020] gap-10 px-6 text-center overflow-hidden"
     >
-      {/* Image reveal with scroll-based scale and opacity */}
-      <motion.img
-        className="absolute bottom-10 right-1/4 md:bottom-16 md:right-[5%] lg:bottom-0 lg:right-[15%] 2xl:bottom-0 2xl:right-1/4 h-44 sm:h-52 md:h-80 lg:h-80 object-contain rounded-lg shadow-xl z-20"
-        src={image1}
-        alt="Hero Image"
-        initial={{ opacity: 0, x: 100 }} // Start from the right
-        animate={{
-          opacity: 1,
-          x: 0, // Move to the original position
-          scale: 1,
-        }}
-        transition={{ duration: 1.2, delay: 1.5, ease: "easeOut" }} // Delay for image reveal
-        whileHover={{ scale: 1.05, rotate: 2 }}
-        whileTap={{ scale: 1 }}
+  {/* Updated sparkles positioning */}
+  <div
         style={{
-          scale: imageScale, // Dynamic scale based on scroll
-          opacity: imageOpacity, // Dynamic opacity based on scroll
+          maskImage:
+            "radial-gradient(closest-side at 50% 50%, white, transparent)",
+          WebkitMaskImage:
+            "radial-gradient(closest-side at 50% 50%, white, transparent)",
         }}
-      />
-
-      {/* Text reveal with a delay */}
-      <motion.div
-        className="px-8 lg:px-0 text-center max-w-4xl mx-auto z-10"
-        style={{
-          opacity: 1 - Math.min(scrollY.get() / 600, 1), // Adjust for smoother fade
-          transform: `translateY(${scrollY.get() * 0.3}px)`, // Slower text translation
-        }}
+        className="absolute 2xl:-top-[calc(27%-56px)] lg:-top-[calc(32%-56px)] md:-top-[calc(19%-56px)] -top-[calc(26%-56px)] left-0 w-full h-96 overflow-hidden
+    before:absolute before:inset-0 before:bg-[radial-gradient(circle at bottom, #3273ff, transparent 90%)] before:opacity-40
+    after:absolute after:-left-1/2 after:top-1/2 after:aspect-[1/0.7] after:w-[200%] after:rounded-[10%]
+    after:border-t after:border-[#163474] after:bg-[#3273ff2d]"
       >
-        <motion.h1
-          className="text-4xl md:text-5xl lg:text-5xl font-Head text-white leading-tight"
-          initial={{ opacity: 0, y: 50 }} // Start with opacity 0 and below position
-          animate={{ opacity: 1, y: 0 }} // Fade and move to position
-          transition={{ duration: 1, delay: 2.5, ease: "easeOut" }} // Delay for text reveal
-        >
-          <span className="font-black text-gray-500">&lt;</span>
-          {displayedText}
-          <span className="font-black text-gray-500">/&gt;</span>
-        </motion.h1>
-      </motion.div>
+        <Sparkles
+          density={500} // Increased particle count
+          speed={1} // Reduced speed for smoothness
+          size={2} // Increased size for better visibility
+          direction="bottom" // Particles move downward
+          opacitySpeed={1} // Gradual fading
+          color="#32A7FF" // Blue color for particles
+          className="absolute inset-x-0 top-1/2 h-full w-full z-20"
+        />
+      </div>
 
-      {/* Animated name reveal with scroll-based animation */}
-      <motion.div className="flex flex-col text-7xl font-medium lg:left-1/3 absolute lg:bottom-[10%] md:bottom-[15%] md:left-[20%] bottom-1/4">
-        {/* Animated Kshirod reveal */}
-        <motion.span
-          className="text-gray-900"
-          style={{ x: kshirodX }} // Smooth rightward movement
-          initial={{ opacity: 0, x: -100 }} // Start from the left
-          animate={{ opacity: 1, x: 0 }} // Fade in and move to its final position
-          transition={{ type: "spring", stiffness: 100, delay: 0.2 }} // Delay for smooth reveal
-        >
-          Kshirod
-        </motion.span>
+      {/* Name Animation */}
+      <motion.h1 className="font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-tight tracking-wider drop-shadow-lg name-container scroll-text z-30">
+        <span className="hidden lg:inline">
+          {"Kshirod".split("").map((letter, index) => (
+            <span
+              key={index}
+              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+            >
+              {letter}
+            </span>
+          ))}
+          <span className="inline-block ml-6"></span>
+          {"Mahala".split("").map((letter, index) => (
+            <span
+              key={index}
+              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+            >
+              {letter}
+            </span>
+          ))}
+        </span>
+        <span className="lg:hidden block">
+          {"Kshirod".split("").map((letter, index) => (
+            <span
+              key={index}
+              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+            >
+              {letter}
+            </span>
+          ))}
+          <br />
+          {"Mahala".split("").map((letter, index) => (
+            <span
+              key={index}
+              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+            >
+              {letter}
+            </span>
+          ))}
+        </span>
+      </motion.h1>
 
-        {/* Animated Mahala reveal */}
-        <motion.span
-          className="text-gray-900"
-          style={{ x: mahalaX }} // Smooth leftward movement
-          initial={{ opacity: 0, x: 100 }} // Start from the right
-          animate={{ opacity: 1, x: 0 }} // Fade in and move to its final position
-          transition={{ type: "spring", stiffness: 100, delay: 0.5 }} // Longer delay for smooth reveal
-        >
-          Mahala
-        </motion.span>
-      </motion.div>
+      {/* Subtitle with Gradient Effect */}
+      <motion.h2 className="subtitle font-bold text-xl md:text-2xl lg:text-3xl leading-[100%] tracking-wide lg:max-w-3xl md:max-w-lg max-w-xs mx-auto drop-shadow-sm scroll-text text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+        Turning challenges into opportunities through full stack innovation.
+      </motion.h2>
     </div>
   );
 };

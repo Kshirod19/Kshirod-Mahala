@@ -1,201 +1,188 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { CgMenuGridR } from "react-icons/cg";
 import { IoClose } from "react-icons/io5";
 import { gsap } from "gsap";
-import ScrollToPlugin from "gsap/ScrollToPlugin"; // Import ScrollToPlugin
+import ScrollToPlugin from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(ScrollToPlugin); // Register ScrollToPlugin
+gsap.registerPlugin(ScrollToPlugin);
 
 const Navbar = () => {
   const [click, setClick] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
   const [isScrolling, setIsScrolling] = useState(false);
-  const scrollTimeout = useRef(null);
-  const controls = useAnimation();
+  const navLinks = ["home", "about", "projects", "contact"];
+  const sectionsRef = useRef({});
+
+  const observer = useRef(null);
+
+  useEffect(() => {
+    sectionsRef.current = navLinks.reduce((acc, link) => {
+      acc[link] = document.getElementById(link);
+      return acc;
+    }, {});
+
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveLink(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    Object.values(sectionsRef.current).forEach((section) => {
+      observer.current.observe(section);
+    });
+
+    return () => {
+      if (observer.current) {
+        Object.values(sectionsRef.current).forEach((section) =>
+          observer.current.unobserve(section)
+        );
+      }
+    };
+  }, [navLinks]);
 
   const handleClick = () => setClick(!click);
   const closeMenu = () => setClick(false);
 
-  const handleSetActive = (to) => {
-    setActiveLink(to);
-    setTimeout(closeMenu, 200); // Slight delay for a smoother closing transition
-  };
-
-  // Smooth scroll to section
   const handleSmoothScroll = (section) => {
+    setIsScrolling(true); // Activate blur effect
+    setTimeout(() => setIsScrolling(false), 1200); // Remove blur after scrolling
+
     gsap.to(window, {
-      scrollTo: { y: `#${section}`, offsetY: 50 }, // Offset to prevent overlap with fixed navbar
-      duration: 1.5, // Scroll duration for smoothness
-      ease: "power3.out", // Easing function for smooth scroll
+      scrollTo: { y: `#${section}` },
+      duration: 1.2,
+      ease: "power3.out",
     });
-  };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current);
-      }
-      scrollTimeout.current = setTimeout(() => {
-        setIsScrolling(false);
-      }, 300);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!click) {
-      if (isScrolling) {
-        controls.start({ y: -100 });
-      } else {
-        controls.start({ y: 0 });
-      }
-    } else {
-      controls.start({ y: 0 });
-    }
-  }, [isScrolling, click, controls]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      controls.start({ opacity: 1, y: 0 });
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [controls]);
-
-  useEffect(() => {
-    if (click) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [click]);
-
-  // Variants for nav link animation
-  const navItemVariants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: { opacity: 1, y: 0 },
-  };
-
-  const navLinks = ["home", "about", "projects", "contact"];
-
-  // Animation for fading in the navbar on page load
-  const fadeInVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1,
-        ease: "easeInOut",
-      },
-    },
+    setTimeout(() => closeMenu(), 600); // Keep menu open briefly before closing
   };
 
   return (
     <motion.div
-      className={`fixed z-30 w-full ${
-        isScrolling ? "bg-[#111827] bg-opacity-90" : "bg-transparent"
-      } transition-colors duration-500 shadow-lg backdrop-blur-lg box-border`}
-      id="navbar"
-      variants={fadeInVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <nav className="flex justify-between px-4 py-3 mx-auto max-w-5xl transition-transform duration-300 lg:px-8 box-border">
+    initial={{ y: "-100%", opacity: 0 }}
+    animate={{ y: "0%", opacity: 1 }}
+    transition={{ duration: 1, ease: "easeOut", delay: 1 }}
+    className={`fixed z-30 w-full ${
+      click ? "bg-opacity-95" : "bg-opacity-10"
+    } bg-[#2253bc] transition-colors duration-500 shadow-lg backdrop-blur-lg box-border`}
+  >
+  
+      <nav className="flex justify-between px-4 py-3 mx-auto max-w-5xl lg:px-8 box-border">
+        {/* Logo */}
         <div className="flex items-center z-20">
           <div className="text-2xl font-bold cursor-pointer">
             <span className="text-white font-logoname">Kshirod</span>
           </div>
         </div>
+
+        {/* Mobile Menu Toggle */}
         <div
           className="lg:hidden z-20 cursor-pointer"
           onClick={handleClick}
           aria-expanded={click}
         >
           <motion.div
+            initial={{ rotate: 0 }}
             animate={{ rotate: click ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.5 }}
           >
             {click ? (
-              <IoClose
-                size={30}
-                className="text-white transition-colors duration-300"
-              />
+              <IoClose size={30} className="text-white" />
             ) : (
-              <CgMenuGridR
-                size={30}
-                className="text-white transition-colors duration-300"
-              />
+              <CgMenuGridR size={30} className="text-white" />
             )}
           </motion.div>
         </div>
 
-        {/* Mobile Menu */}
-        <motion.ul
-          className={`${
-            click ? "translate-x-0" : "-translate-x-full"
-          } lg:hidden absolute inset-0 w-full h-screen bg-[#111827] bg-opacity-95 gap-8 flex flex-col items-center justify-center transform transition-transform duration-300 ease-in-out`}
-          initial={{ opacity: 0, y: -20 }}
-          animate={click ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-        >
-          {navLinks.map((item, index) => (
-            <motion.li
-              key={item}
-              className={`nav-item ${activeLink === item ? "active" : ""}`}
-              variants={navItemVariants}
-              initial="hidden"
-              animate={click ? "visible" : "hidden"}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+        {/* Mobile Menu Dropdown */}
+        <AnimatePresence>
+          {click && (
+            <motion.div
+              initial={{ opacity: 0, y: "-100%" }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: "-100%" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+              className="lg:hidden absolute inset-0 w-full h-screen bg-[#111827] bg-opacity-95 flex flex-col gap-10 items-center justify-center"
             >
-              <button
-                className="text-white text-3xl hover:text-blue-500 transition-colors duration-300"
-                onClick={() => {
-                  handleSmoothScroll(item);
-                  handleSetActive(item);
-                }}
-              >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </button>
-            </motion.li>
-          ))}
-        </motion.ul>
+              {navLinks.map((item, index) => (
+                <motion.div
+                  key={item}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 30 }}
+                  transition={{
+                    delay: 0.6 + index * 0.08, // Start revealing AFTER dropdown completes
+                    duration: 0.6,
+                  }}
+                  className="overflow-hidden"
+                >
+                  <motion.button
+                    className={`text-white text-3xl block relative transition-colors duration-300 ${
+                      activeLink === item ? "text-blue-500" : "hover:text-blue-400"
+                    }`}
+                    onClick={() => handleSmoothScroll(item)}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <motion.span
+                      initial={{ y: "100%" }}
+                      animate={{ y: "0%" }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="inline-block"
+                    >
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </motion.span>
+                  </motion.button>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex lg:items-center lg:space-x-8">
           {navLinks.map((item, index) => (
             <motion.li
               key={item}
-              className={`nav-item ${activeLink === item ? "active" : ""}`}
-              variants={navItemVariants}
-              initial="hidden"
-              animate="visible"
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className={`text-lg relative transition-colors duration-300 ${
+                activeLink === item ? "text-blue-500" : "text-white hover:text-blue-400"
+              }`}
             >
-              <button
-                className="text-white text-lg hover:text-blue-400 transition-colors duration-300"
-                onClick={() => {
-                  handleSmoothScroll(item);
-                  handleSetActive(item);
-                }}
+              <motion.button
+                onClick={() => handleSmoothScroll(item)}
               >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </button>
+                <motion.span
+                  initial={{ y: "100%" }}
+                  animate={{ y: "0%" }}
+                  transition={{
+                    duration: 0.6,
+                    ease: "easeOut",
+                    delay: 0.3 + index * 0.05, // Speed-up effect
+                  }}
+                  className="inline-block"
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </motion.span>
+              </motion.button>
             </motion.li>
           ))}
         </ul>
       </nav>
+
+      {/* Blur effect when scrolling */}
+      {isScrolling && (
+        <motion.div
+          className="fixed inset-0 bg-black bg-opacity-40 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+        />
+      )}
     </motion.div>
   );
 };

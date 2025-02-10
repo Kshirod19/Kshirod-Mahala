@@ -1,117 +1,103 @@
-import React from "react";
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { useScroll } from "framer-motion";
+import Lenis from "@studio-freight/lenis";
+import ProjectCard from "./ProjectCard"; // Import the individual card component
 import bookify from "../Portfolio-photos/Logo.png";
-import passmgr from "../Portfolio-photos/Password-Manager.png";
 import arialsecurity from "../Portfolio-photos/Arial.png";
+import passmgr from "../Portfolio-photos/Password-Manager.png";
 import weatherapp from "../Portfolio-photos/Weather App.png";
-
-const items = [
+import portfolio from "../Portfolio-photos/Photo1.png";
+const projects = [
   {
-    id: 1,
     title: "Bookify",
     img: bookify,
-    desc: "Bookify is a platform built with ReactJS and Tailwind CSS, enabling users to list, buy, and sell books. It integrates Firebase for real-time database and user authentication, offering seamless book transactions.",
+    description:
+      "Bookify is an intuitive platform enabling seamless book transactions like listing, buying, and selling. Built with ReactJS, Tailwind CSS, and Firebase for real-time updates and user authentication, it offers a user-friendly interface and high responsiveness.",
+    skills: ["ReactJS", "Tailwind CSS", "Firebase"],
     link: "https://kshirod19.github.io/Bookify/",
   },
   {
-    id: 2,
     title: "Arial Security & Escort Services",
     img: arialsecurity,
-    desc: "Developed a static website for Arial Security & Escort Services using ReactJS and Tailwind CSS. The project focuses on modern design principles and responsiveness.",
+    description:
+      "A professionally designed static website for Arial Security & Escort Services. The project integrates modern design principles and fully responsive layouts to ensure usability across devices.",
+    skills: ["ReactJS", "Tailwind CSS", "Responsive Design"],
     link: "https://kshirod19.github.io/Arial-Security-Escort/",
   },
   {
-    id: 3,
     title: "Password Manager Website",
     img: passmgr,
-    desc: "Developed a secure Password Manager UI using the MERN stack with features like user authentication, encrypted storage, and responsive design.",
+    description:
+      "A secure Password Manager UI with features like encrypted password storage, authentication, and account management. Developed using the MERN stack, this project emphasizes security and user accessibility.",
+    skills: ["ReactJS", "NodeJS", "ExpressJS", "MongoDB"],
   },
-
   {
-    id: 4,
     title: "Weather Report Website",
     img: weatherapp,
-    desc: "A Weather Report App built with ReactJS, TailwindCSS, and WeatherAPI that provides real-time weather updates.",
+    description:
+      "An interactive Weather Report App delivering real-time weather updates using WeatherAPI. Built with ReactJS and Tailwind CSS, it ensures a smooth user experience with an appealing design.",
+    skills: ["ReactJS", "Tailwind CSS", "WeatherAPI"],
     link: "https://kshirod19.github.io/Weather-Report-App/",
   },
   {
-    id: 5,
-    title: "Pokemon-List",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6XhP6bWIl0-RDr7Jn3XI2cacVTJVRNz8AaA&s",
-    desc: "Pokemon-List is a ReactJS-based website styled with Tailwind CSS that fetches Pokémon data via an API, displaying a comprehensive list of all available Pokémon, offering a smooth and responsive user experience.",
-    link: "https://kshirod19.github.io/Pokemon-List/",
+    title: "Bhavya Bansal's Portfolio (CTO Persist Ventures)",
+    img: portfolio,
+    description:
+      "An interactive Weather Report App delivering real-time weather updates using WeatherAPI. Built with ReactJS and Tailwind CSS, it ensures a smooth user experience with an appealing design.",
+    skills: ["ReactJS", "Tailwind CSS", "WeatherAPI"],
+    link: "https://kshirod19.github.io/Bhavya-Bansal-Portfolio/",
   },
 ];
 
-function ProjectItem({ title, img, desc, link }) {
-  return (
-    <section className="scroll-snap-center flex flex-col md:flex-row items-center justify-center w-full px-6 py-10 gap-20">
-      <motion.div
-        className="flex justify-center items-center w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 rounded-lg shadow-lg"
-        initial={{ opacity: 0, scale: 1.2 }} // Initial scale larger
-        whileInView={{ opacity: 1, scale: 1 }} // Scale down to normal on scroll
-        transition={{ duration: 1.5, type: "spring", stiffness: 100 }}
-      >
-        <img
-          src={img}
-          alt={title}
-          className="object-cover w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 rounded-lg shadow-lg"
-        />
-      </motion.div>
-      <motion.div
-        className="flex flex-col items-start max-w-sm gap-6 text-white"
-        initial={{ opacity: 0, scale: 1.2 }} // Initial scale larger
-        whileInView={{ opacity: 1, scale: 1 }} // Scale down to normal on scroll
-        transition={{ duration: 1, type: "spring", stiffness: 100 }}
-        viewport={{ once: true }}
-      >
-        <motion.h2
-          className="text-2xl font-bold text-gray-100 md:text-3xl lg:text-4xl"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          {title}
-        </motion.h2>
-        <motion.p
-          className="text-base md:text-lg lg:text-xl"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-        >
-          {desc}
-        </motion.p>
-        {link && (
-          <a href={link} target="_blank" rel="noopener noreferrer">
-            <button className="px-6 py-3 text-lg font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 hover:scale-105 transition-transform">
-              Visit
-            </button>
-          </a>
-        )}
-      </motion.div>
-    </section>
-  );
-}
+const ProjectList = () => {
+  const container = useRef(null);
 
-export default function Projects() {
+  useEffect(() => {
+    const lenis = new Lenis({ smooth: true });
+
+    const handleAnimationFrame = (time) => {
+      lenis.raf(time);
+      requestAnimationFrame(handleAnimationFrame);
+    };
+    requestAnimationFrame(handleAnimationFrame);
+
+    return () => lenis.destroy();
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
   return (
     <div
-      id="projects"
-      className="scroll-snap-type-y-mandatory h-auto overflow-y-scroll bg-[#0d1117] w-full flex flex-col items-center justify-center py-10 px-10 "
-      style={{ scrollSnapType: "y mandatory" }}
+    id="projects"
+      ref={container}
+      className="bg-gradient-to-b from-[#303030] to-[#404040] w-full h-auto box-border "
     >
-      <span className="head justify-center items-center flex text-white text-4xl py-6">
-        Projects
-      </span>
-      {items.map((item) => (
-        <ProjectItem
-          key={item.id}
-          title={item.title}
-          img={item.img}
-          desc={item.desc}
-          link={item.link}
-        />
-      ))}
+      <div className="relative w-full lg:h-[70vh] md:h-[50vh] h-[30vh] grid place-content-center text-white">
+        <h1 className="text-3xl font-semibold text-center md:text-5xl">
+          My Projects
+        </h1>
+      </div>
+
+      <div className="box-border w-full py-10 text-white ">
+        {projects.map((project, i) => {
+          const targetScale = 1 - (projects.length - i) * 0.05;
+          return (
+            <ProjectCard
+              key={`p_${i}`}
+              index={i}
+              project={project}
+              progress={scrollYProgress}
+              range={[i * 0.25, 1]}
+              targetScale={targetScale}
+            />
+          );
+        })}
+      </div>
     </div>
   );
-}
+};
+
+export default ProjectList;

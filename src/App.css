@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: white;
 }
 /* scrollbar */
 /* Apply to all scrollbars */
@@ -74,3 +73,13 @@ section {
 .background_footer {
   background-size: cover;
 }
+
+/* Example of smooth transition (optional) */
+.particles canvas {
+  transition: opacity 0.3s ease-in-out;
+}
+.mask-gradient {
+  mask-image: radial-gradient(closest-side at 50% 50%, white, transparent);
+  -webkit-mask-image: radial-gradient(closest-side at 50% 50%, white, transparent);
+}
+
