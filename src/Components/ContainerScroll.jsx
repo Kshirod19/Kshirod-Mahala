@@ -23,11 +23,11 @@ const ContainerScroll = ({ titleComponent, children }) => {
 
   return (
     <div
-      className="h-auto flex items-center justify-center relative p-2 md:p-20"
+      className="relative flex items-center justify-center h-auto p-2 md:p-20 font-bodyfont"
       ref={containerRef}
     >
       <div
-        className="py-10 md:py-40 w-full relative"
+        className="relative w-full py-10 md:py-40"
         style={{
           perspective: "1000px",
           transition: "transform 1s ease-in-out",
@@ -65,7 +65,7 @@ const Card = ({ rotate, scale, children }) => (
     }}
     className="max-w-5xl -mt-12 mx-auto h-[41rem] md:h-[35rem] lg:h-[30rem] w-full border-4 border-[#6C6C6C] p-5 md:p-5 bg-zinc-900 rounded-[30px] shadow-2xl"
   >
-    <div className="h-full w-full overflow-hidden rounded-2xl  md:rounded-2xl md:p-4">
+    <div className="w-full h-full overflow-hidden rounded-2xl md:rounded-2xl md:p-4">
       {children}
     </div>
   </motion.div>

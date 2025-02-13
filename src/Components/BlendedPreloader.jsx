@@ -16,13 +16,13 @@ const BlendedPreloader = ({ setShowSplash }) => {
   }, [setShowSplash]);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black text-white overflow-hidden">
-      <div className="text-6xl flex flex-col items-center">
+    <div className="flex items-center justify-center h-screen overflow-hidden text-white bg-black font-namefont">
+      <div className="flex flex-col items-center text-6xl">
         {/* Swarm Effect for Text */}
         <div className="flex flex-wrap justify-center">
           {/* Large Screens: Single Line */}
           <motion.div
-            className="hidden lg:flex gap-3"
+            className="hidden gap-3 lg:flex"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -44,7 +44,7 @@ const BlendedPreloader = ({ setShowSplash }) => {
 
           {/* Mobile & Tablet: Two-Line Split */}
           <motion.div
-            className="lg:hidden flex flex-col text-center"
+            className="flex flex-col text-center lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}

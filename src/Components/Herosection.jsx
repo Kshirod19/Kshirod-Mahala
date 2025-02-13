@@ -102,7 +102,7 @@ gsap.fromTo(
   return (
     <div
       id="home"
-      className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#000000] to-[#202020] gap-10 px-6 text-center overflow-hidden"
+      className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#000000] to-[#202020] gap-10 px-6 text-center overflow-hidden font-bodyfont"
     >
   {/* Updated sparkles positioning */}
   <div
@@ -124,17 +124,17 @@ gsap.fromTo(
           direction="bottom" // Particles move downward
           opacitySpeed={1} // Gradual fading
           color="#32A7FF" // Blue color for particles
-          className="absolute inset-x-0 top-1/2 h-full w-full z-20"
+          className="absolute inset-x-0 z-20 w-full h-full top-1/2"
         />
       </div>
 
       {/* Name Animation */}
-      <motion.h1 className="font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-tight tracking-wider drop-shadow-lg name-container scroll-text z-30">
+      <motion.h1 className="z-30 text-5xl font-bold leading-tight tracking-wider text-white font-namefont md:text-7xl lg:text-8xl drop-shadow-lg name-container scroll-text">
         <span className="hidden lg:inline">
           {"Kshirod".split("").map((letter, index) => (
             <span
               key={index}
-              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+              className="inline-block transition-all duration-500 letter hover:scale-110 hover:transition-all"
             >
               {letter}
             </span>
@@ -143,17 +143,17 @@ gsap.fromTo(
           {"Mahala".split("").map((letter, index) => (
             <span
               key={index}
-              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+              className="inline-block transition-all duration-500 letter hover:scale-110 hover:transition-all"
             >
               {letter}
             </span>
           ))}
         </span>
-        <span className="lg:hidden block">
+        <span className="block lg:hidden">
           {"Kshirod".split("").map((letter, index) => (
             <span
               key={index}
-              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+              className="inline-block transition-all duration-500 letter hover:scale-110 hover:transition-all"
             >
               {letter}
             </span>
@@ -162,7 +162,7 @@ gsap.fromTo(
           {"Mahala".split("").map((letter, index) => (
             <span
               key={index}
-              className="letter inline-block transition-all duration-500 hover:scale-110 hover:transition-all"
+              className="inline-block transition-all duration-500 letter hover:scale-110 hover:transition-all"
             >
               {letter}
             </span>

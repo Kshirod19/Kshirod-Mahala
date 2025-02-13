@@ -40,13 +40,13 @@ const About = () => {
   return (
     <div
       id="about"
-      className="relative min-h-screen bg-gradient-to-b from-[#202020] to-[#303030] flex flex-col items-center justify-center px-5 py-10  md:py-10 lg:px-16 box-border"
+      className="relative min-h-screen bg-gradient-to-b from-[#202020] to-[#303030] flex flex-col items-center justify-center px-5 py-10  md:py-10 lg:px-16 box-border font-bodyfont"
     >
       <ContainerScroll>
 
         <h2
           id="heading"
-          className="mb-6 text-4xl font-extrabold text-blue-500 md:text-5xl lg:text-6xl"
+          className="mb-6 text-4xl font-extrabold text-blue-500 md:text-5xl lg:text-6xl font-namefont"
           >
           <span className="hidden lg:inline">I’m Kshirod Mahala,</span>
           <span className="lg:hidden">

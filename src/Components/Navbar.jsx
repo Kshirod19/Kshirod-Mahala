@@ -69,20 +69,20 @@ const Navbar = () => {
     transition={{ duration: 1, ease: "easeOut", delay: 1 }}
     className={`fixed z-30 w-full ${
       click ? "bg-opacity-95" : "bg-opacity-10"
-    } bg-[#2253bc] transition-colors duration-500 shadow-lg backdrop-blur-lg box-border`}
+    } bg-[#2253bc] transition-colors duration-500 shadow-lg backdrop-blur-lg box-border font-bodyfont font-medium`}
   >
   
-      <nav className="flex justify-between px-4 py-3 mx-auto max-w-5xl lg:px-8 box-border">
+      <nav className="box-border flex justify-between max-w-5xl px-4 py-3 mx-auto lg:px-8">
         {/* Logo */}
-        <div className="flex items-center z-20">
-          <div className="text-2xl font-bold cursor-pointer">
-            <span className="text-white font-logoname">Kshirod</span>
+        <div className="z-20 flex items-center">
+          <div className="text-2xl font-medium cursor-pointer">
+            <span className="tracking-wide text-white font-namefont">Kshirod</span>
           </div>
         </div>
 
         {/* Mobile Menu Toggle */}
         <div
-          className="lg:hidden z-20 cursor-pointer"
+          className="z-20 cursor-pointer lg:hidden"
           onClick={handleClick}
           aria-expanded={click}
         >
@@ -176,7 +176,7 @@ const Navbar = () => {
       {/* Blur effect when scrolling */}
       {isScrolling && (
         <motion.div
-          className="fixed inset-0 bg-black bg-opacity-40 z-50"
+          className="fixed inset-0 z-50 bg-black bg-opacity-40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

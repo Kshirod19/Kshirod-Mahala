@@ -73,7 +73,7 @@ const ProjectList = () => {
     <div
     id="projects"
       ref={container}
-      className="bg-gradient-to-b from-[#303030] to-[#404040] w-full h-auto box-border "
+      className="bg-gradient-to-b from-[#303030] to-[#404040] w-full h-auto box-border font-bodyfont "
     >
       <div className="relative w-full lg:h-[70vh] md:h-[50vh] h-[30vh] grid place-content-center text-white">
         <h1 className="text-3xl font-semibold text-center md:text-5xl">

@@ -10,7 +10,7 @@ const ProjectCard = ({ index, project, progress, range, targetScale }) => {
   return (
     <div
       ref={container}
-      className="flex items-center justify-center sticky lg:top-[20%] md:top-[15%] top-[10%] p-4"
+      className="flex items-center justify-center sticky lg:top-[20%] md:top-[15%] top-[10%] p-4 font-bodyfont"
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -80,7 +80,7 @@ const ProjectCard = ({ index, project, progress, range, targetScale }) => {
                 whileHover={{ scale: 1.1, backgroundColor: "#2563EB", color: "#ffffff" }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ duration: 0.2 }}
-                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-white transition ease-out duration-300 bg-blue-600 rounded-md shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-900"
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-white transition duration-300 ease-out bg-blue-600 rounded-md shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-900"
               >
                 View Project
                 <motion.svg

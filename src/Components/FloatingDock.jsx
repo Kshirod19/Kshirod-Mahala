@@ -12,7 +12,7 @@ const FloatingDockMobile = ({ items, className }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} font-bodyfont`}>
    
 
       <AnimatePresence>

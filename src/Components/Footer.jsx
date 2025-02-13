@@ -46,9 +46,9 @@ const Footer = () => {
   return (
       <div
         id="contact"
-        className="relative flex items-center justify-center bg-gradient-to-b from-[#404040] to-[#606060] w-full h-screen box-border"
+        className="relative flex items-center justify-center bg-gradient-to-b from-[#404040] to-[#606060] w-full h-screen box-border font-bodyfont"
       >
-        <div className="absolute overflow-hidden left-0 w-full  h-full z-20">
+        <div className="absolute left-0 z-20 w-full h-full overflow-hidden">
           
         </div>
         <FloatingDock
